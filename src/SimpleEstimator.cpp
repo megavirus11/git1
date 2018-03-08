@@ -13,17 +13,21 @@ SimpleEstimator::SimpleEstimator(std::shared_ptr<SimpleGraph> &g){
 }
 
 std::unordered_set <uint32_t> x;
-std::vector< std::unordered_set <uint32_t> > inNode={x,x,x,x};
-std::vector< std::unordered_set <uint32_t> > outNode={x,x,x,x};
+std::vector< std::unordered_set <uint32_t> > inNode;
+std::vector< std::unordered_set <uint32_t> > outNode;
 std::vector <uint32_t> y;
-std::vector< std::vector <uint32_t> > inNodeTotal={y,y,y,y};
-std::vector< std::vector <uint32_t> > outNodeTotal={y,y,y,y};
+std::vector< std::vector <uint32_t> > inNodeTotal;
+std::vector< std::vector <uint32_t> > outNodeTotal;
 
 
 
 uint32_t pass=0;
 
 void SimpleEstimator::prepare() {
+    inNode.resize(graph->getNoVertices());
+    outNode.resize(graph->getNoVertices());
+    inNodeTotal.resize(graph->getNoVertices());
+    outNodeTotal.resize(graph->getNoVertices());
 
     // do your prep here
     if (pass == 0) {
