@@ -52,6 +52,7 @@ uint32_t VS=0;
 uint32_t nrPases=0;
 uint32_t noOut=0;
 uint32_t noIn=0;
+uint32_t loops = 0;
 
 void initialize()
 {
@@ -62,15 +63,15 @@ void initialize()
     nrPases=0;
     noOut=0;
     noIn=0;
+    loops=0;
 }
 
 std::shared_ptr<SimpleGraph> SimpleEstimator::estimate_aux(RPQTree *q) {
 
     // estimate according to the AST bottom-up
 
-
-
     if(q->isLeaf()) {
+
         // project out the label in the AST
         std::regex directLabel (R"((\d+)\+)");
         std::regex inverseLabel (R"((\d+)\-)");
@@ -96,6 +97,7 @@ std::shared_ptr<SimpleGraph> SimpleEstimator::estimate_aux(RPQTree *q) {
     }
 
     if(q->isConcat()) {
+        loops++;
         // estimate the children
         auto leftGraph = SimpleEstimator::estimate_aux(q->left);
         auto rightGraph = SimpleEstimator::estimate_aux(q->right);
@@ -128,13 +130,14 @@ void SimpleEstimator::calculate(uint32_t labell, bool inverse) {
     auto tt=TR*TS;
         auto value1 = tt/VS;
         auto value2 = tt/VR;
-    if(nrPases == 0)
+    if(loops == 0)
     {
-        nrPases+=TR;
+        nrPases +=TR;
     }
-    else{
-        nrPases+=std::min(value1, value2);
+    else {
+        nrPases += std::min(value1, value2);
     }
+
 
 }
 
