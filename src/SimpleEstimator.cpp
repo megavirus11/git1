@@ -14,35 +14,28 @@ SimpleEstimator::SimpleEstimator(std::shared_ptr<SimpleGraph> &g){
 
 std::vector< std::unordered_set <uint32_t> > inNode;
 std::vector< std::unordered_set <uint32_t> > outNode;
-std::vector< std::vector <uint32_t> > inNodeTotal;
-std::vector< std::vector <uint32_t> > outNodeTotal;
-
-
-
-uint32_t pass=0;
+std::vector< std::vector <uint32_t> > nodeTotal;
 
 void SimpleEstimator::prepare() {
     inNode.resize(graph->getNoVertices());
     outNode.resize(graph->getNoVertices());
-    inNodeTotal.resize(graph->getNoVertices());
-    outNodeTotal.resize(graph->getNoVertices());
+    nodeTotal.resize(graph->getNoVertices());
 
 
-        for (int i = 0; i < graph->adj.size(); i++) {
-            for (int j = 0; j < graph->adj[i].size(); j++) {
+    for (int i = 0; i < graph->adj.size(); i++) {
+        for (int j = 0; j < graph->adj[i].size(); j++) {
 
-                int edge = graph->adj[i].data()[j].first;
-                int to = graph->adj[i].data()[j].second;
-                int from = i;
+            int edge = graph->adj[i].data()[j].first;
+            int to = graph->adj[i].data()[j].second;
+            int from = i;
 
 
-                inNode[edge].insert(to);
-                outNode[edge].insert(from);
+            inNode[edge].insert(to);
+            outNode[edge].insert(from);
 
-                inNodeTotal[edge].emplace_back(to);
-                outNodeTotal[edge].emplace_back(from);
-            }
+            nodeTotal[edge].emplace_back(to);
         }
+    }
 }
 
 uint32_t TR=0;
@@ -52,7 +45,7 @@ uint32_t VS=0;
 uint32_t nrPases=0;
 uint32_t noOut=0;
 uint32_t noIn=0;
-uint32_t loops = 0;
+uint8_t loops = 0;
 
 void initialize()
 {
@@ -110,26 +103,26 @@ std::shared_ptr<SimpleGraph> SimpleEstimator::estimate_aux(RPQTree *q) {
 void SimpleEstimator::calculate(uint32_t labell, bool inverse) {
     if(inverse)
     {
-        TR = outNodeTotal[labell].size();
+        TR = nodeTotal[labell].size();
         VR = outNode[labell].size();
         noIn = VR;
-        TS = inNodeTotal[labell].size();
+        TS = nodeTotal[labell].size();
         VS = inNode[labell].size();
         noOut = VS;
     }
     else {
 
-        TR = inNodeTotal[labell].size();
+        TR = nodeTotal[labell].size();
         VR = inNode[labell].size();
         noIn = VR;
-        TS = outNodeTotal[labell].size();
+        TS = nodeTotal[labell].size();
         VS = outNode[labell].size();
         noOut = VS;
     }
 
     auto tt=TR*TS;
-        auto value1 = tt/VS;
-        auto value2 = tt/VR;
+    auto value1 = tt/VS;
+    auto value2 = tt/VR;
     if(loops == 0)
     {
         nrPases +=TR;
@@ -150,9 +143,4 @@ cardStat SimpleEstimator::estimate(RPQTree *q) {
 
     return cardStat {noOut, nrPases, noIn};
 }
-
-
-
-
-
 
