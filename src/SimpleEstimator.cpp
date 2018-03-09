@@ -128,7 +128,7 @@ void SimpleEstimator::calculate(uint32_t labell, bool inverse) {
     auto tt=TR*TS;
         auto value1 = tt/VS;
         auto value2 = tt/VR;
-        nrPases+=std::min(TR, std::min(value1, value2));
+        nrPases+=std::min(value1, value2);
    /* }
     else {
         TR=TS;
