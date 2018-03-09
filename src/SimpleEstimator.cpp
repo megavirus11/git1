@@ -128,7 +128,14 @@ void SimpleEstimator::calculate(uint32_t labell, bool inverse) {
     auto tt=TR*TS;
         auto value1 = tt/VS;
         auto value2 = tt/VR;
+    if(nrPases == 0)
+    {
+        nrPases+=TR;
+    }
+    else{
         nrPases+=std::min(value1, value2);
+    }
+
 }
 
 cardStat SimpleEstimator::estimate(RPQTree *q) {
