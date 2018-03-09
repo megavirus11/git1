@@ -22,13 +22,10 @@ std::vector< std::vector <uint32_t> > outNodeTotal;
 uint32_t pass=0;
 
 void SimpleEstimator::prepare() {
-    auto q1 = std::chrono::steady_clock::now();
     inNode.resize(graph->getNoVertices());
     outNode.resize(graph->getNoVertices());
     inNodeTotal.resize(graph->getNoVertices());
     outNodeTotal.resize(graph->getNoVertices());
-    auto q2 = std::chrono::steady_clock::now();
-    std::cout << "Time to evaluate: " << std::chrono::duration<double, std::milli>(q2 - q1).count() << " ms" << std::endl;
 
 
         for (int i = 0; i < graph->adj.size(); i++) {
@@ -37,7 +34,6 @@ void SimpleEstimator::prepare() {
                 int edge = graph->adj[i].data()[j].first;
                 int to = graph->adj[i].data()[j].second;
                 int from = i;
-
 
 
                 inNode[edge].insert(to);
@@ -110,37 +106,29 @@ std::shared_ptr<SimpleGraph> SimpleEstimator::estimate_aux(RPQTree *q) {
 }
 
 void SimpleEstimator::calculate(uint32_t labell, bool inverse) {
+    if(inverse)
+    {
+        TR = outNodeTotal[labell].size();
+        VR = outNode[labell].size();
+        noIn = VR;
+        TS = inNodeTotal[labell].size();
+        VS = inNode[labell].size();
+        noOut = VS;
+    }
+    else {
 
-   // if(TR == 0) {
-        //first pass
-        TR=inNodeTotal[labell].size();
-        VR=inNode[labell].size();
-        noIn=VR;
-        TS=outNodeTotal[labell].size();
-        VS=outNode[labell].size();
-        noOut=VS;
+        TR = inNodeTotal[labell].size();
+        VR = inNode[labell].size();
+        noIn = VR;
+        TS = outNodeTotal[labell].size();
+        VS = outNode[labell].size();
+        noOut = VS;
+    }
 
- /*   std::cout << "\n(2)TR:" << TR << std::endl;
-    std::cout << "\n(2)TS" << TS << std::endl;
-    std::cout << "\n(2)VR" << VR << std::endl;
-    std::cout << "\n(2)VS" << VS << std::endl;
-*/
     auto tt=TR*TS;
         auto value1 = tt/VS;
         auto value2 = tt/VR;
         nrPases+=std::min(value1, value2);
-   /* }
-    else {
-        TR=TS;
-        VR=VS;
-        noOut=VS;
-
-        TS=inNodeTotal[labell].size();
-        VS=inNode[labell].size();
-        noIn=VS;
-
-        nrPases=std::min(TR*(TS/VS), TS*(TR/VR));
-    }*/
 }
 
 cardStat SimpleEstimator::estimate(RPQTree *q) {
