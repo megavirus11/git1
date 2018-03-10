@@ -38,6 +38,8 @@ void SimpleEstimator::prepare() {
     }
 }
 
+uint32_t prevT = 0;
+uint32_t prevV = 0;
 uint32_t T = 0;
 uint32_t VR = 0;
 uint32_t VS = 0;
@@ -45,6 +47,8 @@ uint32_t nrPases = 0;
 uint8_t loops = 0;
 
 void initialize() {
+    prevT = 0;
+    prevV = 0;
     T = 0;
     VR = 0;
     VS = 0;
@@ -104,6 +108,13 @@ void SimpleEstimator::calculate(uint32_t labell, bool inverse) {
         VS = outNode[labell].size();
     }
 
+    if(prevT != 0)
+    {
+        auto tt = prevT * T;
+        auto value1 = tt / prevV;
+        auto value2 = tt / VS;
+        nrPases += std::min(value1, value2);
+    }
     auto tt = T * T;
     auto value1 = tt / VS;
     auto value2 = tt / VR;
@@ -112,7 +123,8 @@ void SimpleEstimator::calculate(uint32_t labell, bool inverse) {
     } else {
         nrPases += std::min(value1, value2);
     }
-
+    prevT = T;
+    prevV = VS;
 
 }
 
