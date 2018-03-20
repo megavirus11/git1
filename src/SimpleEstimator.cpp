@@ -1,7 +1,6 @@
 //
 // Created by Nikolay Yakovets on 2018-02-01.
 //
-#include <chrono>
 #include "SimpleGraph.h"
 #include "SimpleEstimator.h"
 #include "SimpleEvaluator.h"
