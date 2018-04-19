@@ -9,12 +9,13 @@ SimpleEstimator::SimpleEstimator(std::shared_ptr<SimpleGraph> &g) {
 
     // works only with SimpleGraph
     graph = g;
+
 }
+
 
 std::vector<uint32_t> inNode;
 std::vector<uint32_t> outNode;
 std::vector<uint32_t> nodeTotal;
-
 void SimpleEstimator::prepare() {
 
     std::vector<std::unordered_set<uint32_t> > inNodes;

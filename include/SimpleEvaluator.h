@@ -14,9 +14,8 @@
 #include "Graph.h"
 
 class SimpleEvaluator : public Evaluator {
-
     std::shared_ptr<SimpleGraph> graph;
-   //std::shared_ptr<SimpleEstimator> est;
+    std::shared_ptr<SimpleEstimator> est;
 
 public:
 
@@ -34,6 +33,9 @@ public:
 
     static cardStat computeStats(std::shared_ptr<SimpleGraph> &g);
 
+    //std::shared_ptr<SimpleGraph> evaluate_aux_nojoin(RPQTree *q);
+
+    //std::shared_ptr<SimpleGraph> evaluate_join_list(std::vector<std::shared_ptr<SimpleGraph>> &vector);
 };
 
 

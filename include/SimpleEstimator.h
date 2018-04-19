@@ -22,7 +22,6 @@ public:
     std::shared_ptr<SimpleGraph> estimate_aux(RPQTree *q);
     static void calculate(uint32_t label, bool inverse);
     static std::shared_ptr<SimpleGraph> join(std::shared_ptr<SimpleGraph> &left, std::shared_ptr<SimpleGraph> &right);
-
 };
 
 
