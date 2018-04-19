@@ -18,7 +18,6 @@ void SimpleEvaluator::attachEstimator(std::shared_ptr<SimpleEstimator> &e) {
 }
 
 std::vector<std::shared_ptr<SimpleGraph>> graphCache;
-std::vector<std::shared_ptr<SimpleGraph>> graphCacheInverse;
 
 void SimpleEvaluator::prepare() {
     // if attached, prepare the estimator
@@ -26,7 +25,6 @@ void SimpleEvaluator::prepare() {
 
     for (int i = 0; i < graph->getNoLabels(); ++i) {
         graphCache.emplace_back(SimpleEvaluator::project(static_cast<uint32_t>(i), false, graph));
-        graphCacheInverse.emplace_back(SimpleEvaluator::project(static_cast<uint32_t>(i), true, graph));
     }
 
     //prepare other things here.., if necessary
@@ -138,7 +136,7 @@ std::shared_ptr<SimpleGraph> SimpleEvaluator::evaluate_aux(RPQTree *q) {
             return graphCache[label];
         }
         else {
-            return graphCacheInverse[label];
+            return SimpleEvaluator::project(label, inverse, graph);
         }
     }
 
