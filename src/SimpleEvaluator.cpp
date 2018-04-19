@@ -138,7 +138,7 @@ std::shared_ptr<SimpleGraph> SimpleEvaluator::evaluate_aux(RPQTree *q) {
             return graphCache[label];
         }
         else {
-            return graphCache[label];
+            return graphCacheInverse[label];
         }
     }
 
