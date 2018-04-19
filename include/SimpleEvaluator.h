@@ -16,7 +16,7 @@
 class SimpleEvaluator : public Evaluator {
 
     std::shared_ptr<SimpleGraph> graph;
-    std::shared_ptr<SimpleEstimator> est;
+   //std::shared_ptr<SimpleEstimator> est;
 
 public:
 
