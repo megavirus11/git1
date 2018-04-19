@@ -29,15 +29,15 @@ cardStat SimpleEvaluator::computeStats(std::shared_ptr<SimpleGraph> &g) {
 
     cardStat stats {};
 
-    for(int source = 0; source < g->getNoVertices(); source++) {
+    /*for(int source = 0; source < g->getNoVertices(); source++) {
         if(!g->adj[source].empty()) stats.noOut++;
-    }
+    }*/
 
     stats.noPaths = g->getNoDistinctEdges();
 
-    for(int target = 0; target < g->getNoVertices(); target++) {
+    /*for(int target = 0; target < g->getNoVertices(); target++) {
         if(!g->reverse_adj[target].empty()) stats.noIn++;
-    }
+    }*/
 
     return stats;
 }
@@ -47,19 +47,26 @@ std::shared_ptr<SimpleGraph> SimpleEvaluator::project(uint32_t projectLabel, boo
     auto out = std::make_shared<SimpleGraph>(in->getNoVertices());
     out->setNoLabels(in->getNoLabels());
 
-    if(!inverse) {
-        // going forward
-        for(uint32_t source = 0; source < in->getNoVertices(); source++) {
-            for (auto labelTarget : in->adj[source]) {
+    //if(!inverse) {
+    // going forward
+    for(uint32_t source = 0; source < in->getNoVertices(); source++) {
+        for (auto labelTarget : in->adj[source]) {
 
-                auto label = labelTarget.first;
-                auto target = labelTarget.second;
+            auto label = labelTarget.first;
+            auto target = labelTarget.second;
 
-                if (label == projectLabel)
+            if (label == projectLabel) {
+                if(!inverse) {
                     out->addEdge(source, target, label);
+                }
+                else
+                {
+                    out->addEdge(target, source, label);
+                }
             }
         }
-    } else {
+    }
+    /*} else {
         // going backward
         for(uint32_t source = 0; source < in->getNoVertices(); source++) {
             for (auto labelTarget : in->reverse_adj[source]) {
@@ -71,7 +78,7 @@ std::shared_ptr<SimpleGraph> SimpleEvaluator::project(uint32_t projectLabel, boo
                     out->addEdge(source, target, label);
             }
         }
-    }
+    }*/
 
     return out;
 }
