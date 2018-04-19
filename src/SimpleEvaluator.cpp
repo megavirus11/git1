@@ -19,7 +19,7 @@ void SimpleEvaluator::attachEstimator(std::shared_ptr<SimpleEstimator> &e) {
 void SimpleEvaluator::prepare() {
 
     // if attached, prepare the estimator
-    if(est != nullptr) est->prepare();
+    //if(est != nullptr) est->prepare();
 
     // prepare other things here.., if necessary
 
@@ -51,11 +51,9 @@ std::shared_ptr<SimpleGraph> SimpleEvaluator::project(uint32_t projectLabel, boo
     // going forward
     for(uint32_t source = 0; source < in->getNoVertices(); source++) {
         for (auto labelTarget : in->adj[source]) {
-
             auto label = labelTarget.first;
-            auto target = labelTarget.second;
-
             if (label == projectLabel) {
+                auto target = labelTarget.second;
                 if(!inverse) {
                     out->addEdge(source, target, label);
                 }
